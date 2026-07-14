@@ -1,0 +1,41 @@
+{{define "content"}}
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+  <div>
+    {{$sortKey := .SortKey}}
+    {{range .Metrics}}
+    <a class="button" style="{{if eq .Key $sortKey}}opacity:1{{else}}opacity:0.55{{end}}; margin-right:0.4rem; text-decoration:none; display:inline-block;" href="/leaderboard?sort={{.Key}}">{{.DisplayName}}</a>
+    {{end}}
+  </div>
+  <a href="/orgs" class="button" style="background:var(--muted)">Start over</a>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th class="rank">#</th>
+      <th>Contributor</th>
+      {{range .Metrics}}<th>{{.DisplayName}}</th>{{end}}
+    </tr>
+  </thead>
+  <tbody>
+    {{range $i, $row := .Rows}}
+    <tr>
+      <td class="rank">{{inc $i}}</td>
+      <td>{{$row.Login}}</td>
+      {{range $.Metrics}}<td>{{index $row.Values .Key | printf "%.0f"}}</td>{{end}}
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{if not .Rows}}<p>No contributor activity found for the selected repositories in this window.</p>{{end}}
+
+{{if or .PendingRepos .FailedRepos}}
+<div class="repo-status">
+  <strong>Note:</strong> some repos weren't included in these totals:
+  <ul>
+    {{range .PendingRepos}}<li class="pending">{{.}} &mdash; GitHub is still computing stats for this repo; try again shortly.</li>{{end}}
+    {{range .FailedRepos}}<li class="failed">{{.}} &mdash; failed to fetch stats.</li>{{end}}
+  </ul>
+</div>
+{{end}}
+{{end}}

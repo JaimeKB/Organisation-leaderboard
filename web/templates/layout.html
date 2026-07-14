@@ -1,0 +1,20 @@
+{{define "layout"}}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Org Contributor Leaderboard</title>
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/htmx.min.js"></script>
+</head>
+<body>
+<h1>Org Contributor Leaderboard</h1>
+<p class="subtitle">Pick organizations, then repos, then see who's been shipping.</p>
+<div class="steps">
+  <span{{if eq .Step "orgs"}} class="current"{{end}}>1. Organizations</span> &rsaquo;
+  <span{{if eq .Step "repos"}} class="current"{{end}}>2. Repositories</span> &rsaquo;
+  <span{{if eq .Step "leaderboard"}} class="current"{{end}}>3. Leaderboard</span>
+</div>
+{{template "content" .}}
+</body>
+</html>{{end}}

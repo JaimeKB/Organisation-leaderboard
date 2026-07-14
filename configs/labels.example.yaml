@@ -1,0 +1,11 @@
+# Copy to configs/labels.yaml to use. Not yet read by the UI (planned: a
+# label-based repo picker so you don't have to re-check boxes every run) --
+# see the "Extending" section of the README.
+version: 1
+orgs:
+  my-org:
+    repos:
+      backend-api:
+        labels: ["backend", "critical"]
+      frontend-app:
+        labels: ["frontend"]

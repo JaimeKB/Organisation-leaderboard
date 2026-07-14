@@ -1,0 +1,7 @@
+{{define "content"}}{{template "status-pending" .}}{{end}}
+{{define "status-pending"}}
+<div id="poll" hx-get="/leaderboard/status" hx-trigger="every 1s" hx-swap="outerHTML">
+  <div class="spinner"></div>
+  <p style="text-align:center; color:var(--muted)">Fetching contributor stats&hellip; this can take a minute for repos GitHub hasn't cached stats for yet.</p>
+</div>
+{{end}}

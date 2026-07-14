@@ -1,0 +1,16 @@
+{{define "content"}}
+{{if .Err}}<div class="error">{{.Err}}</div>{{end}}
+<form method="post" action="/orgs">
+  <fieldset>
+    <legend>Select organizations</legend>
+    {{if not .Orgs}}<p>No organizations found for this token.</p>{{end}}
+    {{range .Orgs}}
+    <label class="row">
+      <input type="checkbox" name="org" value="{{.Login}}"{{if .Selected}} checked{{end}}>
+      {{.Login}}
+    </label>
+    {{end}}
+  </fieldset>
+  <button type="submit">Next</button>
+</form>
+{{end}}

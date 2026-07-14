@@ -1,0 +1,20 @@
+{{define "content"}}
+{{if .Err}}<div class="error">{{.Err}}</div>{{end}}
+<form method="post" action="/repos">
+  {{range .Groups}}
+  <fieldset>
+    <legend>{{.Org}}</legend>
+    {{if not .Repos}}<p>No repositories found.</p>{{end}}
+    {{range .Repos}}
+    <label class="row">
+      <input type="checkbox" name="repo" value="{{.Org}}|{{.Name}}"{{if .Selected}} checked{{end}}>
+      {{.Name}}
+      {{if .Private}}<span class="private-badge">private</span>{{end}}
+      {{if .Labels}}<span class="labels">{{range .Labels}}#{{.}} {{end}}</span>{{end}}
+    </label>
+    {{end}}
+  </fieldset>
+  {{end}}
+  <button type="submit">Next</button>
+</form>
+{{end}}
