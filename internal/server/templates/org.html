@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Org}} — Leaderboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="back">&larr; Organisations</a>
+    <h1>{{.Org}}</h1>
+  </header>
+  <main id="app" data-org="{{.Org}}">
+    {{if .Err}}<p class="error">{{.Err}}</p>{{end}}
+
+    <form id="filters">
+      <fieldset>
+        <legend>Date range</legend>
+        <label>Since <input type="date" name="since" value="{{.SinceDate}}"></label>
+        <label>Until <input type="date" name="until" value="{{.UntilDate}}"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Repositories</legend>
+        <div class="checkbox-grid">
+          {{range .Repos}}
+          <label><input type="checkbox" name="repo" value="{{.Name}}">{{.Name}}</label>
+          {{end}}
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Members</legend>
+        <div class="checkbox-grid">
+          {{range .Members}}
+          <label><input type="checkbox" name="user" value="{{.Login}}">{{.Login}}</label>
+          {{end}}
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit">Apply filters</button>
+        <button type="reset" id="clear-filters">Clear</button>
+      </div>
+    </form>
+
+    <table id="leaderboard">
+      <thead>
+        <tr><th>#</th><th></th><th>Contributor</th><th>Commits</th></tr>
+      </thead>
+      <tbody id="leaderboard-body">
+        {{range $i, $c := .Leaderboard}}
+        <tr>
+          <td>{{inc $i}}</td>
+          <td>{{if $c.AvatarURL}}<img src="{{$c.AvatarURL}}" class="avatar-sm" alt="">{{end}}</td>
+          <td>{{if $c.Name}}{{$c.Name}}{{else}}{{$c.Login}}{{end}}</td>
+          <td>{{$c.CommitCount}}</td>
+        </tr>
+        {{else}}
+        <tr><td colspan="4" class="muted">No commits in this range.</td></tr>
+        {{end}}
+      </tbody>
+    </table>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
