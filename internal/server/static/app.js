@@ -27,8 +27,22 @@
     `).join('');
   }
 
-  async function applyFilters() {
+  const EMPTY_MESSAGE = 'Select repositories and members, then click "Load data".';
+
+  function showEmpty(message) {
+    tbody.innerHTML = `<tr><td colspan="4" class="muted">${escapeHtml(message)}</td></tr>`;
+  }
+
+  async function loadData() {
     const data = new FormData(form);
+    const repos = data.getAll('repo');
+    const users = data.getAll('user');
+
+    if (!repos.length || !users.length) {
+      showEmpty('Select at least one repository and one member, then click "Load data".');
+      return;
+    }
+
     const params = new URLSearchParams();
     params.set('org', org);
 
@@ -36,8 +50,8 @@
     const until = data.get('until');
     if (since) params.set('since', since);
     if (until) params.set('until', until);
-    for (const repo of data.getAll('repo')) params.append('repo', repo);
-    for (const user of data.getAll('user')) params.append('user', user);
+    for (const repo of repos) params.append('repo', repo);
+    for (const user of users) params.append('user', user);
 
     tbody.innerHTML = '<tr><td colspan="4" class="muted">Loading…</td></tr>';
     try {
@@ -52,11 +66,14 @@
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    applyFilters();
+    loadData();
   });
 
   const clearBtn = document.getElementById('clear-filters');
   if (clearBtn) {
-    clearBtn.addEventListener('click', () => setTimeout(applyFilters, 0));
+    clearBtn.addEventListener('click', () => {
+      form.reset();
+      showEmpty(EMPTY_MESSAGE);
+    });
   }
 })();

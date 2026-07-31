@@ -39,7 +39,6 @@ type orgDashboardData struct {
 	Org          string
 	Repos        []*github.Repository
 	Members      []*github.User
-	Leaderboard  []leaderboard.Contributor
 	SinceDate    string
 	UntilDate    string
 	SelectedRepo map[string]bool
@@ -68,19 +67,16 @@ func (s *Server) handleOrgDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// The leaderboard itself isn't computed here: fetching commits for every
+	// repo/member in a large org is slow, so it's left empty until the user
+	// picks specific repos/members and requests it via the API.
 	until := time.Now()
 	since := until.Add(-leaderboard.DefaultWindow)
-	rows, err := leaderboard.Compute(ctx, s.gh, leaderboard.Query{Org: org, Since: since, Until: until})
-	if err != nil {
-		s.renderOrgError(w, org, err)
-		return
-	}
 
 	s.render(w, "org.html", orgDashboardData{
-		Org:          org,
-		Repos:        repos,
-		Members:      members,
-		Leaderboard:  rows,
+		Org:       org,
+		Repos:     repos,
+		Members:   members,
 		SinceDate: since.Format("2006-01-02"),
 		UntilDate: until.Format("2006-01-02"),
 	})

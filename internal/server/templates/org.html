@@ -40,8 +40,8 @@
       </fieldset>
 
       <div class="actions">
-        <button type="submit">Apply filters</button>
-        <button type="reset" id="clear-filters">Clear</button>
+        <button type="submit">Load data</button>
+        <button type="button" id="clear-filters">Clear</button>
       </div>
     </form>
 
@@ -50,16 +50,7 @@
         <tr><th>#</th><th></th><th>Contributor</th><th>Commits</th></tr>
       </thead>
       <tbody id="leaderboard-body">
-        {{range $i, $c := .Leaderboard}}
-        <tr>
-          <td>{{inc $i}}</td>
-          <td>{{if $c.AvatarURL}}<img src="{{$c.AvatarURL}}" class="avatar-sm" alt="">{{end}}</td>
-          <td>{{if $c.Name}}{{$c.Name}}{{else}}{{$c.Login}}{{end}}</td>
-          <td>{{$c.CommitCount}}</td>
-        </tr>
-        {{else}}
-        <tr><td colspan="4" class="muted">No commits in this range.</td></tr>
-        {{end}}
+        <tr><td colspan="4" class="muted">Select repositories and members, then click "Load data".</td></tr>
       </tbody>
     </table>
   </main>
